@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: black;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+
+    .brand {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-list li {
+      margin-right: 20px;
+    }
+
+    .nav-list a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .nav-list a:hover {
+      color: #ffc107;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #ffc107;
+      color: #fff;
+    }
+
+    .post {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    form {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* New styles for comments */
+    .comment {
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative; /* Added position relative for comment container */
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .comment-actions {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-bottom: 5px;
+    }
+
+    .btn-like, .btn-unlike {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      border: 1px solid #3498db; /* Default border color for both like and unlike */
+    }
+
+    .btn-like:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-unlike:hover {
+      background-color: #c0392b;
+    }
+
+    /* Style for liked state */
+    .btn-like.liked {
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    /* Style for unliked state */
+    .btn-unlike.unliked {
+      background-color: #c0392b;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="#" class="brand">Facebook</a>
+      <ul class="nav-list">
+       
+        <li><%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete } %></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Post Details</h1>
+
+    <div class="post">
+      <p><strong>Created by:</strong> <%= @post.user.user_name %></p>
+      <p><strong>Content:</strong> <%= @post.content %></p>
+      <p><strong>No of Comments:</strong> <%= @post.comments.count %></p>
+    </div>
+
+    <h2>Comments</h2>
+    <% @comments.each do |comment| %>
+      <div class="comment">
+        <div class="comment-header">
+          <strong><%= comment.user.user_name %></strong>
+          <div class="comment-actions">
+            <% if comment.likes.exists?(user: current_user) %>
+              <%= link_to 'Unlike', comment_likes_path(comment), method: :post, class: 'btn btn-like liked' %>
+            <% else %>
+              <%= link_to 'Like', comment_likes_path(comment), method: :post, class: 'btn btn-unlike unliked' %>
+            <% end %>
+            
+          </div>
+        </div>
+        <p><strong>Content:</strong><%= comment.content %></p>
+        <p><strong> No of Likes:</strong> <%= comment.likes.count %></p>
+      </div>
+    <% end %>
+
+    <!-- Form to create a new comment -->
+    <%= form_with(model: [@post, Comment.new], local: true) do |form| %>
+      <div>
+        <%= form.label :content %><br>
+        <%= form.text_area :content, rows: 3 %>
+      </div>
+
+      <div class="buttons">
+        <%= form.submit "Add Comment", class: 'btn btn-primary' %>
+        <%= link_to 'Back to Posts', posts_path, class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>
+
+
+
+

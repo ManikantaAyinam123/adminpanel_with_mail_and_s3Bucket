@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign up</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+ 
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+ 
+    .signup-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+ 
+    .signup-form {
+      margin-top: 20px;
+    }
+ 
+    .form-group {
+      margin-bottom: 15px;
+    }
+ 
+    label {
+      font-weight: bold;
+    }
+ 
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+ 
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+ 
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+ 
+<div class="container">
+  <div class="signup-container">
+    <h2>Sign up</h2>
+ 
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'signup-form' }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+ 
+      <div class="form-group">
+        <%= f.label :user_name %>
+        <%= f.text_field :user_name, class: 'form-control', autofocus: true %>
+      </div>
+      <div class="form-group">
+      <%= f.label :Phone_number %>
+      <%= f.text_field :Phone_number, class: 'form-control', autofocus: true %>
+    </div>
+    <div class="form-group">
+  <%= f.label :gender %> <!-- Add a label for the gender field -->
+  <div>
+    <%= f.radio_button :gender, 'male' %>
+    <%= label_tag 'male', 'Male' %>
+ 
+    <%= f.radio_button :gender, 'female' %>
+    <%= label_tag 'female', 'Female' %>
+ 
+    <%= f.radio_button :gender, 'other' %>
+    <%= label_tag 'other', 'Other' %>
+  </div>
+</div>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: 'form-control', autofocus: true, autocomplete: "email" %>
+      </div>
+ 
+      <div class="form-group">
+        <%= f.label :password %>
+        <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %>
+        <%= f.password_field :password, class: 'form-control', autocomplete: "new-password" %>
+      </div>
+ 
+      <div class="form-group">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, class: 'form-control', autocomplete: "new-password" %>
+      </div>
+ 
+      <div class="form-actions">
+        <%= f.submit "Sign up", class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+ 
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+ 
+</body>
+</html>
+

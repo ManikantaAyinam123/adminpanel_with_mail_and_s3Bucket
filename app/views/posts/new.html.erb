@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      max-width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #495057;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<%= form_with(model: @post, url: posts_path, method: :post, local: true, html: { multipart: true }) do |form| %>
+  <p>
+    <%= form.label :title %><br>
+    <%= form.text_field :title %>
+  </p>
+  <p>
+    <%= form.label :content %><br>
+    <%= form.text_area :content %>
+  </p>
+  <p>
+  <%= form.label :image %><br>
+  <%= form.file_field :image %>
+</p>
+<p>
+<%= form.label :photos %><br>
+<%= form.file_field :photos,multiple: true%>
+</p>
+  <p>
+    <%= form.submit "Create Post" %>
+  </p>
+  <%= link_to 'Back to Posts', posts_path, class: 'btn btn-primary' %>
+<% end %>
+</form>
+</body>
+</html>
+
+  

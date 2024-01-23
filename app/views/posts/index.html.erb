@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: black;
+      padding: 10px 20px;
+      margin-bottom: 50px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+
+    .brand {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-list li {
+      margin-right: 20px;
+    }
+
+    .nav-list a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .nav-list a:hover {
+      color: #ffc107;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #ffc107;
+      color: #fff;
+    }
+
+    .post {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-like {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      background-color: #3498db;
+      color: #fff;
+      border: 1px solid #2980b9;
+    }
+
+    .btn-like:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-unlike {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      background-color: #e74c3c;
+      color: #fff;
+      border: 1px solid #c0392b;
+    }
+    .btn-success {
+  background-color: #28a745 !important; /* Green color */
+  color: #fff; /* Text color */
+}
+
+    .btn-unlike:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-delete {
+      padding: 8px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      background-color: #dc3545;
+      color: #fff;
+      border: 1px solid #c82333;
+    }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+
+    footer {
+      color: white;
+      padding: 10px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #343a40;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="#" class="brand">Facebook</a>
+      <ul class="nav-list">
+        <% if user_signed_in? %>
+          <li><%= link_to 'Sign out', destroy_user_session_path, data: { turbo_method: :delete } %></li>
+        <% else %>
+          <li><%= link_to 'Sign in', new_user_session_path %></li>
+          <li><%= link_to 'Sign up', new_user_registration_path %></li>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <% if user_signed_in? %>
+      <h1>Posts</h1>
+      <!-- Content to display when the user is signed in -->
+      
+      <%= link_to 'Create New Post', new_post_path, class: 'btn btn-success' %>
+    <% else %>
+      <!-- Content to display when the user is not signed in -->
+    <% end %>
+
+    <% if user_signed_in? %>
+      <% @posts.each do |post| %>
+        <div class="post">
+       
+          <p><b>Content: </b><%= post.content %></p>
+          <%= image_tag post.image, style:"width: 20%;" if  post.image.attached?%>
+          <div>
+          <% post.photos.each do |photo| %>
+            <%= image_tag photo, style: 'width: 500px; height: 300px;' %>
+          <% end %>
+          </div>
+          <p><strong>No of Likes: </strong> <%= post.likes.count %></p>
+          <%= link_to 'View Post', post_path(post), class: 'btn btn-primary' %>
+          
+          <% if post.likes.exists?(user: current_user) %>
+            <%= link_to 'Unlike', post_likes_path(post), method: :post, class: 'btn btn-unlike' %>
+          <% else %>
+            <%= link_to 'Like', post_likes_path(post), method: :post, class: 'btn btn-like' %>
+          <% end %>
+
+          <% if post.user == current_user %>
+            <%= link_to "Delete", post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: 'btn btn-delete' %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <h1>Please sign in to view posts</h1>
+    <% end %>
+  </div>
+
+ 
+</body>
+</html>
+
+
